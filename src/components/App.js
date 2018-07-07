@@ -1,10 +1,20 @@
 import React, { Component } from 'react';
+import TextBlockRow from './TextBlockRow'
 
 class App extends Component {
+
+    ontextBlockSelected(){
+
+    }
+
     render() {
-        return <div>
-            <h1>My App</h1>
-        </div>
+        return (
+            <div className="content">
+                <div className="ms-Grid">
+                    <TextBlockRow textBlockSelected={this.ontextBlockSelected.bind(this)}/>
+                </div>
+            </div>
+        )
     }
 }
 

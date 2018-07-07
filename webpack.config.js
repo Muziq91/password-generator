@@ -2,35 +2,42 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
-module.exports={
-    entry:'./src/index.js',
-    output:{
-        path: path.join(__dirname,'/dist'),
-        filename:'app.bundle.js'
+module.exports = {
+    entry: './src/index.js',
+    output: {
+        path: path.join(__dirname, '/dist'),
+        filename: 'app.bundle.js'
     },
-    module:{
-        rules:[
+    module: {
+        rules: [
             {
-                test:/\.js$/,
+                test: /\.js$/,
                 exclude: /node_modules/,
-                use:{
-                        loader:'babel-loader'
-                    }
+                use: {
+                    loader: 'babel-loader'
+                }
             },
             {
-                test: /\.css$/,
-                use: [MiniCssExtractPlugin.loader, "css-loader"]
-              }
+                test: /\.scss$/,
+                use: [
+                    MiniCssExtractPlugin.loader,
+                    "css-loader",
+                    "sass-loader"
+                ]
+            }
         ]// rules ends
     }, // modules ends
-    plugins:[
+    plugins: [
         new HtmlWebpackPlugin({
             title: 'Password Generator',
             template: './src/index.html'
-          }),
-          new MiniCssExtractPlugin({
+        }),
+        new MiniCssExtractPlugin({
             filename: "[name].css",
             chunkFilename: "[id].css"
-          })
-    ] // plugins ends
+        })
+    ], // plugins ends
+    resolve:{
+        extensions: ['.js', '.scss']
+    }
 }
