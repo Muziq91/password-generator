@@ -11,6 +11,7 @@
   "author": "Mircea Matei",
   "license": "MIT",
   "dependencies": {
+    "flux": "^3.1.3",
     "office-ui-fabric-react": "^6.27.0",
     "react": "^16.4.1",
     "react-dom": "^16.4.1",

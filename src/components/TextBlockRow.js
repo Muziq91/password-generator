@@ -1,29 +1,59 @@
 import React, { Component } from 'react';
+import * as TextBlockRowActions from '../actions/TextBlockRowActions'
+import TextBlockRowStore from '../stores/TextBlockRowStore'
+import TextBlock from './TextBlock';
 import PropTypes from 'prop-types';
-import { PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 
 class TextBlockRow extends Component {
 
+    constructor() {
+        super();
+        this._textBlockRowStore = new TextBlockRowStore();
+        this.state = {
+            blockRowText: []
+        }
+        this._onTextBlockChange = this._onTextBlockChange.bind(this);
+    }
+
+    _onTextBlockChange() {
+        this.setState({
+            blockRowText: this._textBlockRowStore.getTextBlock()
+        })
+    }
+
+    componentWillMount() {
+        this._textBlockRowStore.addChangeListener(this._onTextBlockChange)
+    }
+
+    componentDidMount() {
+        TextBlockRowActions.createTextBlock();
+    }
+
+    componentWillUnmount() {
+        _textBlockRowStore.removeChangeListener(this._onTextBlockChange)
+    }
+
+    onTextBlockClicked(text) {
+        TextBlockRowActions.createTextBlock();
+    }
+
     initializeTextBlocks() {
         var textBlocks = [];
-        for (var i = 0; i < 4; i++) {
-            textBlocks.push(                
-                    <div className="ms-Grid-col ms-sm3 ms-md3 ms-lg3"
-                         key = {`textBlockColumn${i}`}>
-                        <PrimaryButton                            
-                            data-automation-id="text block column"
-                            ariaDescription="This is a text block column.">
-                            RIG
-                        </PrimaryButton>
-                    </div>);
-        }
+        const { blockRowText } = this.state;
 
-        return( <div className="ms-Grid-row row"> {textBlocks}</div>)
-    };
-        
+        textBlocks = blockRowText.map(row => {
+
+            return (<TextBlock key={row}
+                text={row}
+                onTextBlockClicked={this.onTextBlockClicked.bind(this)} />)
+        });
+
+        return (<div className="ms-Grid-row row"> {textBlocks} </div>);
+    }
+
     render() { return this.initializeTextBlocks() }
 }
-                
+
 TextBlockRow.propTypes = { textBlockSelected: PropTypes.func.isRequired }
-                
+
 export default TextBlockRow;
