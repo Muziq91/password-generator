@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import TextBlockRowContainer from './textBlockRowContainer'
+import TextBlocksCreator from './TextBlocksCreator'
 import TextBlockRowProcesStore from '../stores/textBlockRowProcessStore'
 
 class App extends Component {
@@ -23,7 +23,7 @@ class App extends Component {
         return (
             <div className="content">
                 <div className="ms-Grid">
-                    <TextBlockRowContainer />
+                    <TextBlocksCreator />
                 </div>
             </div>
         )

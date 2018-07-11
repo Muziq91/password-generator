@@ -39,7 +39,7 @@ class TextBlockRow extends Component {
         this.props.textBlockSelected(text);
     }
 
-    initializeTextBlocks() {
+    _initializeTextBlocks() {
         const { blockRowText } = this.state;
 
         return (
@@ -53,7 +53,7 @@ class TextBlockRow extends Component {
             </div>);
     }
 
-    render() { return this.initializeTextBlocks() }
+    render() { return this._initializeTextBlocks() }
 }
 
 TextBlockRow.propTypes = { textBlockSelected: PropTypes.func.isRequired }

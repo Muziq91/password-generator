@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
 import TextBlockRow from './textBlockRow'
-import TextBlockDisplayRefresh from './textBlockDisplayRefresh'
+import TextBlockRefresh from './textBlockRefresh'
 import TextBlockDisplay from './textBlockDisplay'
 import * as TextBlockRowActions from '../actions/textBlockRowActions'
 import * as Utils from '../utils';
-import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 
-class TextBlockRowContainer extends Component {
+class TextBlocksCreator extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -14,12 +13,12 @@ class TextBlockRowContainer extends Component {
             textBlockRows: 4
         }
 
-        this.onRefreshTextBlocksClick = this.onRefreshTextBlocksClick.bind(this);
-        this.onTextBlockSelected = this.onTextBlockSelected.bind(this);
-        this.onTextBlockRemoved = this.onTextBlockRemoved.bind(this);
+        this._onRefreshTextBlocksClick = this._onRefreshTextBlocksClick.bind(this);
+        this._onTextBlockSelected = this._onTextBlockSelected.bind(this);
+        this._onTextBlockRemoved = this._onTextBlockRemoved.bind(this);
     }
 
-    onRefreshTextBlocksClick() {
+    _onRefreshTextBlocksClick() {
         this.setState((prevState) => {
             return {
                 textBlockValues: [],
@@ -28,7 +27,7 @@ class TextBlockRowContainer extends Component {
         });
     }
 
-    onTextBlockSelected(text) {
+    _onTextBlockSelected(text) {
         this.setState((prevState) => {
             return {
                 textBlockValues: [...prevState.textBlockValues, text],
@@ -37,7 +36,7 @@ class TextBlockRowContainer extends Component {
         });
     }
 
-    onTextBlockRemoved(text) {
+    _onTextBlockRemoved(text) {
         this.setState((prevState) => {
             const index = prevState.textBlockValues.indexOf(text);
             return {
@@ -51,13 +50,13 @@ class TextBlockRowContainer extends Component {
         TextBlockRowActions.processTextBlock(this.state.textBlockValues);
     }
 
-    initializeBlockRows() {
+    _initializeBlockRows() {
         var rows = [];
         const { textBlockRows } = this.state;
         for (var i = 0; i < textBlockRows; i++) {
             rows.push(
                 <div key={Utils.getUniqueId()}>
-                    <TextBlockRow textBlockSelected={this.onTextBlockSelected} />
+                    <TextBlockRow textBlockSelected={this._onTextBlockSelected} />
                     <br />
                 </div>);
         }
@@ -70,17 +69,17 @@ class TextBlockRowContainer extends Component {
         return (
             <div>
                 <div className="ms-Grid-row row">
-                    <TextBlockDisplayRefresh refreshTextBlocksClick={this.onRefreshTextBlocksClick} />
+                    <TextBlockRefresh refreshTextBlocksClick={this._onRefreshTextBlocksClick} />
                 </div>
                 <br />
-                {this.initializeBlockRows()}
+                {this._initializeBlockRows()}
                 <br />
                 <div className="ms-Grid-row row">
                     <TextBlockDisplay textBlockValues={textBlockValues}
-                        textBlockRemoved={this.onTextBlockRemoved} />
+                        textBlockRemoved={this._onTextBlockRemoved} />
                 </div>
             </div>)
     }
 }
 
-export default TextBlockRowContainer;
+export default TextBlocksCreator;
