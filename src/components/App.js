@@ -1,27 +1,29 @@
 import React, { Component } from 'react';
-import TextBlockRow from './TextBlockRow'
+import TextBlockRowContainer from './textBlockRowContainer'
+import TextBlockRowProcesStore from '../stores/textBlockRowProcessStore'
 
 class App extends Component {
-
-    ontextBlockSelected() {
-
+    constructor() {
+        super();
     }
 
-    initializeBlockRows() {
-        var rows = [];
-        for (var i = 0; i < 4; i++) {
-            rows.push(<TextBlockRow key={`row${i}`}
-                textBlockSelected={this.ontextBlockSelected.bind(this)} />);
-        }
+    _onTextBlockProcess() {
+        console.log(TextBlockRowProcesStore.getProcessedPassword());
+    }
 
-        return (<div className="content"> {rows}</div>);
+    componentWillMount() {
+        TextBlockRowProcesStore.addChangeListener(this._onTextBlockProcess)
+    }
+
+    componentWillUnmount() {
+        TextBlockRowProcesStore.removeChangeListener(this._onTextBlockProcess)
     }
 
     render() {
         return (
             <div className="content">
                 <div className="ms-Grid">
-                    {this.initializeBlockRows()}
+                    <TextBlockRowContainer />
                 </div>
             </div>
         )

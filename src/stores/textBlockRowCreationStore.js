@@ -7,15 +7,13 @@ import uuidv5 from 'uuid'
 const CHANGE = 'CHANGE';
 let _blockRowsState = [];
 
-class TextBlockRowStore extends EventEmitter {
+class TextBlockRowCreationStore extends EventEmitter {
     constructor() {
         super();
         Dispatcher.register(this._registerToActions.bind(this));
     }
 
     _registerToActions(action) {
-        console.log('TextBlockRowStore received an action', action);
-
         switch (action.type) {
             case ActionTypes.CREATE_TEXT_BLOCK:
                 this.createTextBlock();
@@ -30,8 +28,28 @@ class TextBlockRowStore extends EventEmitter {
     }
 
     createTextBlock() {
-        _blockRowsState = uuidv5().toString().split('-');
+        _blockRowsState = this._getNewTextBlocks();
         this.emit(CHANGE);
+    }
+
+    _getNewTextBlocks() {
+        let blockRows = uuidv5().toString().split('-');
+
+        return blockRows.map(block => this._processTextBlock(block));
+    }
+    _processTextBlock(blockOfText) {
+        let blockOfTextLength = blockOfText.length;
+        let newBlockOfText = '';
+
+        if (blockOfTextLength == 3)
+            newBlockOfText = blockOfText;
+
+        while (newBlockOfText.length != 3) {
+            let newIndex = this._getRandomInteger(blockOfTextLength);
+            newBlockOfText += blockOfText[newIndex];
+        }
+
+        return newBlockOfText;
     }
 
     _getRandomInteger(max) {
@@ -48,4 +66,4 @@ class TextBlockRowStore extends EventEmitter {
 
 }
 
-export default TextBlockRowStore;
+export default TextBlockRowCreationStore;

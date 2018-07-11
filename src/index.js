@@ -5,7 +5,7 @@ import { initializeIcons } from '@uifabric/icons';
 import 'office-ui-fabric-react/dist/sass/Fabric.scss';
 import 'office-ui-fabric-react/dist/sass/Fabric.Scoped.scss';
 import './main.scss';
-import App from './components/App'
+import App from './components/app'
 
 initializeIcons();
 ReactDOM.render(

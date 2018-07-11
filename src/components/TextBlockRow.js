@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
-import * as TextBlockRowActions from '../actions/TextBlockRowActions'
-import TextBlockRowStore from '../stores/TextBlockRowStore'
-import TextBlock from './TextBlock';
+import * as TextBlockRowActions from '../actions/textBlockRowActions'
+import TextBlockRowCreationStore from '../stores/textBlockRowCreationStore'
+import TextBlock from './textBlock';
 import PropTypes from 'prop-types';
 
 class TextBlockRow extends Component {
 
     constructor() {
         super();
-        this._textBlockRowStore = new TextBlockRowStore();
+        this._textBlockRowCreationStore = new TextBlockRowCreationStore();
         this.state = {
             blockRowText: []
         }
@@ -17,12 +17,12 @@ class TextBlockRow extends Component {
 
     _onTextBlockChange() {
         this.setState({
-            blockRowText: this._textBlockRowStore.getTextBlock()
+            blockRowText: this._textBlockRowCreationStore.getTextBlock()
         })
     }
 
     componentWillMount() {
-        this._textBlockRowStore.addChangeListener(this._onTextBlockChange)
+        this._textBlockRowCreationStore.addChangeListener(this._onTextBlockChange)
     }
 
     componentDidMount() {
@@ -30,25 +30,26 @@ class TextBlockRow extends Component {
     }
 
     componentWillUnmount() {
-        _textBlockRowStore.removeChangeListener(this._onTextBlockChange)
+        this._textBlockRowCreationStore.removeChangeListener(this._onTextBlockChange)
     }
 
     onTextBlockClicked(text) {
+        this.props.textBlockSelected(text);
         TextBlockRowActions.createTextBlock();
     }
 
     initializeTextBlocks() {
-        var textBlocks = [];
         const { blockRowText } = this.state;
 
-        textBlocks = blockRowText.map(row => {
-
-            return (<TextBlock key={row}
-                text={row}
-                onTextBlockClicked={this.onTextBlockClicked.bind(this)} />)
-        });
-
-        return (<div className="ms-Grid-row row"> {textBlocks} </div>);
+        return (
+            <div className="ms-Grid-row row">
+                {blockRowText.map(row => {
+                    return (
+                        <TextBlock key={row}
+                            text={row}
+                            onTextBlockClicked={this.onTextBlockClicked.bind(this)} />)
+                })}
+            </div>);
     }
 
     render() { return this.initializeTextBlocks() }
