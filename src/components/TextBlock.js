@@ -1,28 +1,19 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 
-class TextBlock extends Component {
+const TextBlock = function (props) {
 
-    constructor() {
-        super();
-    }
+    const { text } = props;
 
-    onTextBlockClicked(text) {
-        this.props.onTextBlockClicked(text);
-    }
-
-    render() {
-        const text = this.props.text;
-        return (
-            <div className="ms-Grid-col ms-sm2 ms-md2 ms-lg2">
-                <PrimaryButton
-                    data-automation-id="text block"
-                    ariaDescription="This is a text block."
-                    onClick={this.onTextBlockClicked.bind(this, text)}
-                    text={text} />
-            </div>)
-    }
+    return (
+        <div className="ms-Grid-col ms-sm2 ms-md2 ms-lg2">
+            <PrimaryButton
+                data-automation-id="text block"
+                ariaDescription="This is a text block."
+                onClick={() => props.onTextBlockClicked(text)}
+                text={text} />
+        </div>)
 }
 
 TextBlock.propTypes = {

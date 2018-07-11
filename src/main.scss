@@ -1,13 +1,25 @@
 body {
     padding-top: 54px;
-    background-color: burlywood;
+    background-color: #eaeaea;
 }
 
-.content{
+.content {
     padding: 10px;
     max-width: 600px;
     max-height: 800px;
-    height: 800px;    
+    height: 800px;
     margin: auto;
-    background-color: azure;
+    background-color: #f8f8f8;
+}
+
+.action-button-display {
+    background-color: #dadada;
+    padding-left: 15px;
+    margin-left: 10px;
+}
+
+.action-button-display-refresh {
+    background-color: #dadada;
+    padding-left: 15px;
+    margin-left: 10px;
 }

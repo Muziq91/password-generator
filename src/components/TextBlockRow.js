@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import * as TextBlockRowActions from '../actions/textBlockRowActions'
 import TextBlockRowCreationStore from '../stores/textBlockRowCreationStore'
+import * as Utils from '../utils';
 import TextBlock from './textBlock';
 import PropTypes from 'prop-types';
 
@@ -12,13 +13,8 @@ class TextBlockRow extends Component {
         this.state = {
             blockRowText: []
         }
+        this._onTextBlockClicked = this._onTextBlockClicked.bind(this)
         this._onTextBlockChange = this._onTextBlockChange.bind(this);
-    }
-
-    _onTextBlockChange() {
-        this.setState({
-            blockRowText: this._textBlockRowCreationStore.getTextBlock()
-        })
     }
 
     componentWillMount() {
@@ -33,9 +29,14 @@ class TextBlockRow extends Component {
         this._textBlockRowCreationStore.removeChangeListener(this._onTextBlockChange)
     }
 
-    onTextBlockClicked(text) {
+    _onTextBlockChange() {
+        this.setState({
+            blockRowText: this._textBlockRowCreationStore.getTextBlock()
+        })
+    }
+
+    _onTextBlockClicked(text) {
         this.props.textBlockSelected(text);
-        TextBlockRowActions.createTextBlock();
     }
 
     initializeTextBlocks() {
@@ -45,9 +46,9 @@ class TextBlockRow extends Component {
             <div className="ms-Grid-row row">
                 {blockRowText.map(row => {
                     return (
-                        <TextBlock key={row}
+                        <TextBlock key={Utils.getUniqueId()}
                             text={row}
-                            onTextBlockClicked={this.onTextBlockClicked.bind(this)} />)
+                            onTextBlockClicked={this._onTextBlockClicked} />)
                 })}
             </div>);
     }

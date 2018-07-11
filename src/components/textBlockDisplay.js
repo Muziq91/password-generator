@@ -1,29 +1,26 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
+import * as Utils from '../utils';
+import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 
-class TextBlockDisplay extends Component {
+const TextBlockDisplay = function (props) {
 
-    constructor() {
-        super();
-    }
-
-    displayTextBlockValues() {
-        let { textBlockValues } = this.props;
-        let displayValues =
-            textBlockValues.map(textBlockValue => {
-                return <div key={`row${textBlockValue}`} className="ms-Grid-col ms-sm2 ms-md2 ms-lg2">{textBlockValue}</div>
-            });
-
-        return displayValues;
-    }
-
-    render() {
-        return this.displayTextBlockValues()
-    }
+    const { textBlockValues } = props;
+    return textBlockValues.map(textBlockValue =>
+        <div key={Utils.getUniqueId()}
+            className="ms-Grid-col ms-sm2 ms-md2 ms-lg2 action-button-display ms-font-xxl">
+            <ActionButton
+                data-automation-id="remove text block"
+                iconProps={{ iconName: 'StatusCircleErrorX' }}
+                onClick={() => props.textBlockRemoved(textBlockValue)}>
+                {textBlockValue}
+            </ActionButton>
+        </div>);
 }
 
 TextBlockDisplay.propTypes = {
-    textBlockValues: PropTypes.array.isRequired
+    textBlockValues: PropTypes.array.isRequired,
+    textBlockRemoved: PropTypes.func.isRequired
 }
 
 export default TextBlockDisplay;

@@ -2,7 +2,7 @@
 import { EventEmitter } from 'events';
 import Dispatcher from '../dispatcher';
 import ActionTypes from '../constants';
-import uuidv5 from 'uuid'
+import uuidv1 from 'uuid'
 
 const CHANGE = 'CHANGE';
 let _blockRowsState = [];
@@ -33,16 +33,16 @@ class TextBlockRowCreationStore extends EventEmitter {
     }
 
     _getNewTextBlocks() {
-        let blockRows = uuidv5().toString().split('-');
-
-        return blockRows.map(block => this._processTextBlock(block));
+        let blockRows = uuidv1().toString().split('-');
+        let processedTextBlocks = blockRows.map(block => this._processTextBlock(block));
+        return this._randomizeTextBlocksCase(processedTextBlocks);
     }
     _processTextBlock(blockOfText) {
         let blockOfTextLength = blockOfText.length;
         let newBlockOfText = '';
 
         if (blockOfTextLength == 3)
-            newBlockOfText = blockOfText;
+            return blockOfText;
 
         while (newBlockOfText.length != 3) {
             let newIndex = this._getRandomInteger(blockOfTextLength);
@@ -50,6 +50,17 @@ class TextBlockRowCreationStore extends EventEmitter {
         }
 
         return newBlockOfText;
+    }
+
+    _randomizeTextBlocksCase(textBlocks) {
+
+        return textBlocks.map((textBlock, index) => {
+            let randomIndex = this._getRandomInteger(textBlocks.length);
+            if (index <= randomIndex)
+                return textBlock.toUpperCase();
+
+            return textBlock;
+        });
     }
 
     _getRandomInteger(max) {
