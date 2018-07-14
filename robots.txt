@@ -6,3 +6,5 @@ Allow: /
 
 User-agent: *
 Disallow: /
+
+sitemap: https://muziq91.github.io/password-generator/sitemap.xml
