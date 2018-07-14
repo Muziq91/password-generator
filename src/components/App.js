@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import TextBlocksCreator from './TextBlocksCreator'
 import TextBlockRowProcesStore from '../stores/textBlockRowProcessStore'
 import PasswordDisplay from './passwordDisplay'
+import PasswordStrengthDisplay from './passwordStrengthDisplay'
 
 class App extends Component {
     constructor() {
@@ -46,6 +47,8 @@ class App extends Component {
                     <TextBlocksCreator textBlocksReset={this._onTextBlocksReset} />
                     <br />
                     <PasswordDisplay text={passwordValue} />
+                    <br />
+                    <PasswordStrengthDisplay key={'UniqueKEy'} text={passwordValue} />                    
                 </div>
             </div>
         )

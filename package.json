@@ -15,6 +15,7 @@
     "office-ui-fabric-react": "^6.27.0",
     "react": "^16.4.1",
     "react-dom": "^16.4.1",
+    "react-password-strength": "^2.3.1",
     "uuid": "^3.3.2"
   },
   "devDependencies": {
