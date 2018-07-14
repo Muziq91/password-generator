@@ -1,30 +1,47 @@
 import React, { Component } from 'react';
-import TextBlockRow from './textBlockRow'
-import TextBlockRefresh from './textBlockRefresh'
-import TextBlockDisplay from './textBlockDisplay'
-import * as TextBlockRowActions from '../actions/textBlockRowActions'
+import TextBlockRow from './textBlockRow';
+import TextBlockReset from './textBlockReset';
+import TextBlockRefresh from './textBlockRefresh';
+import TextBlockDisplay from './textBlockDisplay';
+import PasswordDetails from './passwordDetails';
+import * as TextBlockRowActions from '../actions/textBlockRowActions';
 import * as Utils from '../utils';
+import PropTypes from 'prop-types';
 
 class TextBlocksCreator extends Component {
     constructor(props) {
         super(props);
         this.state = {
             textBlockValues: [],
-            textBlockRows: 4
+            textBlockRows: 4,
+            passwordSize: 12,
+            symbolSize: 3
         }
 
+        this._onResetTextBlocksClick = this._onResetTextBlocksClick.bind(this);
         this._onRefreshTextBlocksClick = this._onRefreshTextBlocksClick.bind(this);
         this._onTextBlockSelected = this._onTextBlockSelected.bind(this);
         this._onTextBlockRemoved = this._onTextBlockRemoved.bind(this);
+        this._onPasswordSizeChange = this._onPasswordSizeChange.bind(this);
+        this._onSymbolSizeChange = this._onSymbolSizeChange.bind(this);
+        this._processTextBlock = this._processTextBlock.bind(this);
     }
 
-    _onRefreshTextBlocksClick() {
+    _onResetTextBlocksClick() {
         this.setState((prevState) => {
             return {
                 textBlockValues: [],
-                textBlockRows: 4
+                textBlockRows: 4,
+                passwordSize: 12,
+                symbolSize: 3
             };
         });
+
+        this.props.textBlocksReset();
+    }
+
+    _onRefreshTextBlocksClick() {
+        this._processTextBlock();
     }
 
     _onTextBlockSelected(text) {
@@ -33,7 +50,7 @@ class TextBlocksCreator extends Component {
                 textBlockValues: [...prevState.textBlockValues, text],
                 textBlockRows: prevState.textBlockRows - 1
             };
-        });
+        }, this._processTextBlock);
     }
 
     _onTextBlockRemoved(text) {
@@ -43,11 +60,28 @@ class TextBlocksCreator extends Component {
                 textBlockValues: prevState.textBlockValues.filter((_, i) => i !== index),
                 textBlockRows: prevState.textBlockRows + 1
             };
-        });
+        }, this._processTextBlock);
     }
 
-    componentDidUpdate() {
-        TextBlockRowActions.processTextBlock(this.state.textBlockValues);
+    _onPasswordSizeChange(value) {
+        this.setState((prevState) => {
+            return {
+                passwordSize: value
+            };
+        }, this._processTextBlock);
+    }
+
+    _onSymbolSizeChange(value) {
+        this.setState((prevState) => {
+            return {
+                symbolSize: value
+            };
+        }, this._processTextBlock);
+    }
+
+    _processTextBlock() {
+        const { textBlockValues, passwordSize, symbolSize } = this.state;
+        TextBlockRowActions.processTextBlock(textBlockValues, passwordSize, symbolSize);
     }
 
     _initializeBlockRows() {
@@ -65,21 +99,29 @@ class TextBlocksCreator extends Component {
     }
 
     render() {
-        const { textBlockValues } = this.state;
+        const { textBlockValues, passwordSize, symbolSize } = this.state;
         return (
             <div>
+                <br />
                 <div className="ms-Grid-row row">
                     <TextBlockRefresh refreshTextBlocksClick={this._onRefreshTextBlocksClick} />
-                </div>
+                    <TextBlockReset resetTextBlocksClick={this._onResetTextBlocksClick} />
+                </div >
+                <br />
+                <PasswordDetails
+                    passwordSize={passwordSize}
+                    symbolSize={symbolSize}
+                    onPasswordSizeChange={this._onPasswordSizeChange}
+                    onSymbolSizeChange={this._onSymbolSizeChange} />
                 <br />
                 {this._initializeBlockRows()}
                 <br />
-                <div className="ms-Grid-row row">
-                    <TextBlockDisplay textBlockValues={textBlockValues}
-                        textBlockRemoved={this._onTextBlockRemoved} />
-                </div>
+                <TextBlockDisplay textBlockValues={textBlockValues}
+                    textBlockRemoved={this._onTextBlockRemoved} />
             </div>)
     }
 }
+
+TextBlocksCreator.propTypes = { textBlocksReset: PropTypes.func.isRequired }
 
 export default TextBlocksCreator;

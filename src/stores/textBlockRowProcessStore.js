@@ -2,8 +2,11 @@
 import { EventEmitter } from 'events';
 import Dispatcher from '../dispatcher';
 import ActionTypes from '../constants';
+import * as Utils from '../utils';
 
 const CHANGE = 'CHANGE';
+let _passwordState = [];
+const _symbols = "!@#$%^&*()_-+={}[]<>,.?/*".split('');
 
 class TextBlockRowProcessStore extends EventEmitter {
     constructor() {
@@ -12,25 +15,73 @@ class TextBlockRowProcessStore extends EventEmitter {
     }
 
     _registerToActions(action) {
-        switch (action.type) {
-            case ActionTypes.PROCESS_TEXT_BLOCK:
-                this.processTextBlock(action.payload);
-                break;
-            default:
-                console.log('NOTHING')
-        }
+        if (action.type == ActionTypes.PROCESS_TEXT_BLOCK)
+            this.processTextBlock(action.payload);
     }
 
-    processTextBlock(textBlockValues) {
+    processTextBlock(payload) {
+        const { textBlockValues, passwordSize, symbolSize } = payload;
 
-        if (!textBlockValues || textBlockValues.length < 4)
+        if (!textBlockValues)
             return;
+
+        if (textBlockValues.length < 4) {
+            _passwordState = textBlockValues.join('');
+        }
+        else {
+            _passwordState = this._computeNewPassword(textBlockValues, passwordSize, symbolSize);
+        }
 
         this.emit(CHANGE);
     }
 
+    _computeNewPassword(textBlockValues, passwordSize, symbolSize) {
+        let passwordText = this._computePasswordText(textBlockValues, passwordSize);
+        return this._computePasswordTextWithSymbols(passwordText, symbolSize);
+    }
+
+    _computePasswordTextWithSymbols(passwordText, symbolSize) {
+        let passwordTextWithSymbols = passwordText;
+        let usedPasswordIndex = [];
+        let symbolsCounter = 0;
+        const symbolsLength = _symbols.length;
+
+        while (symbolsCounter != symbolSize) {
+
+            let newPasswordTextIndex = Utils.getRandomInteger(passwordTextWithSymbols.length);
+
+            if (usedPasswordIndex.indexOf(newPasswordTextIndex) === -1) {
+                let newSymbolIndex = Utils.getRandomInteger(symbolsLength);
+                passwordTextWithSymbols = Utils.replaceCharacter(passwordTextWithSymbols, newPasswordTextIndex, _symbols[newSymbolIndex]);
+                symbolsCounter++;
+                usedPasswordIndex.push(newPasswordTextIndex);
+            }
+        }
+
+        return passwordTextWithSymbols;
+    }
+
+    _computePasswordText(textBlockValues, passwordSize) {
+        let passwordText = textBlockValues.join('');
+
+        if (passwordText.length === passwordSize)
+            return passwordText;
+
+        const alphabet = Utils.getAlphabet();
+        const alphabetLength = alphabet.length;
+
+        while (passwordText.length != passwordSize) {
+            let randomIndex = Utils.getRandomInteger(alphabetLength);
+            passwordText += alphabet[randomIndex];
+        }
+
+        return passwordText;
+    }
+
+
+
     getProcessedPassword() {
-        return "PROCESSING";
+        return _passwordState;
     }
 
     addChangeListener(callback) {

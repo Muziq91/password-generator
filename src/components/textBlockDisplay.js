@@ -6,15 +6,18 @@ import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 const TextBlockDisplay = function (props) {
 
     const { textBlockValues } = props;
-    return textBlockValues.map(textBlockValue =>
-        <div key={Utils.getUniqueId()}
-            className="ms-Grid-col ms-sm2 ms-md2 ms-lg2 action-button-display ms-font-xxl">
-            <ActionButton
-                data-automation-id="remove text block"
-                iconProps={{ iconName: 'StatusCircleErrorX' }}
-                onClick={() => props.textBlockRemoved(textBlockValue)}>
-                {textBlockValue}
-            </ActionButton>
+    return (
+        <div className="ms-Grid-row row text-block-display">
+            {textBlockValues.map(textBlockValue =>
+                <div key={Utils.getUniqueId()}
+                    className="ms-Grid-col ms-sm2 ms-md2 ms-lg2 action-button-display ms-font-xxl">
+                    <ActionButton
+                        data-automation-id="remove text block"
+                        iconProps={{ iconName: 'StatusCircleErrorX' }}
+                        onClick={() => props.textBlockRemoved(textBlockValue)}>
+                        {textBlockValue}
+                    </ActionButton>
+                </div>)}
         </div>);
 }
 

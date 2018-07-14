@@ -1,14 +1,33 @@
 import React, { Component } from 'react';
 import TextBlocksCreator from './TextBlocksCreator'
 import TextBlockRowProcesStore from '../stores/textBlockRowProcessStore'
+import PasswordDisplay from './passwordDisplay'
 
 class App extends Component {
     constructor() {
         super();
+        this.state = {
+            passwordValue: ""
+        }
+
+        this._onTextBlockProcess = this._onTextBlockProcess.bind(this);
+        this._onTextBlocksReset = this._onTextBlocksReset.bind(this);
     }
 
     _onTextBlockProcess() {
-        console.log(TextBlockRowProcesStore.getProcessedPassword());
+        let newPasswordValue = TextBlockRowProcesStore.getProcessedPassword();
+
+        this.setState({
+            passwordValue: newPasswordValue
+        })
+    }
+
+    _onTextBlocksReset() {
+        this.setState((prevState) => {
+            return {
+                passwordValue: ""
+            };
+        });
     }
 
     componentWillMount() {
@@ -20,10 +39,13 @@ class App extends Component {
     }
 
     render() {
+        const { passwordValue } = this.state;
         return (
             <div className="content">
                 <div className="ms-Grid">
-                    <TextBlocksCreator />
+                    <TextBlocksCreator textBlocksReset={this._onTextBlocksReset} />
+                    <br />
+                    <PasswordDisplay text={passwordValue} />
                 </div>
             </div>
         )

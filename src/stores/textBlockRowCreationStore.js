@@ -2,8 +2,9 @@
 import { EventEmitter } from 'events';
 import Dispatcher from '../dispatcher';
 import ActionTypes from '../constants';
-import uuidv1 from 'uuid'
+import * as Utils from '../utils';
 
+const BLOCK_ROW_SIZE = 6;
 const CHANGE = 'CHANGE';
 let _blockRowsState = [];
 
@@ -14,13 +15,8 @@ class TextBlockRowCreationStore extends EventEmitter {
     }
 
     _registerToActions(action) {
-        switch (action.type) {
-            case ActionTypes.CREATE_TEXT_BLOCK:
-                this.createTextBlock();
-                break;
-            default:
-                console.log('NOTHING')
-        }
+        if (action.type == ActionTypes.CREATE_TEXT_BLOCK)
+            this.createTextBlock();
     }
 
     getTextBlock() {
@@ -28,43 +24,39 @@ class TextBlockRowCreationStore extends EventEmitter {
     }
 
     createTextBlock() {
-        _blockRowsState = this._getNewTextBlocks();
+        _blockRowsState = this._getTextBlocks();
         this.emit(CHANGE);
     }
 
-    _getNewTextBlocks() {
-        let blockRows = uuidv1().toString().split('-');
-        let processedTextBlocks = blockRows.map(block => this._processTextBlock(block));
-        return this._randomizeTextBlocksCase(processedTextBlocks);
-    }
-    _processTextBlock(blockOfText) {
-        let blockOfTextLength = blockOfText.length;
-        let newBlockOfText = '';
+    _getTextBlocks() {
+        let blockRows = [];
 
-        if (blockOfTextLength == 3)
-            return blockOfText;
+        while (blockRows.length != BLOCK_ROW_SIZE) {
+            let blockRow = this._getBlockRow();
 
-        while (newBlockOfText.length != 3) {
-            let newIndex = this._getRandomInteger(blockOfTextLength);
-            newBlockOfText += blockOfText[newIndex];
+            if (blockRows.indexOf(blockRow) === -1)
+                blockRows.push(blockRow);
         }
 
-        return newBlockOfText;
+        return blockRows;
     }
 
-    _randomizeTextBlocksCase(textBlocks) {
+    _getBlockRow() {
+        let blockRow = '';
+        const alphabet = Utils.getAlphabet();
+        const alphabetLength = alphabet.length;
 
-        return textBlocks.map((textBlock, index) => {
-            let randomIndex = this._getRandomInteger(textBlocks.length);
-            if (index <= randomIndex)
-                return textBlock.toUpperCase();
+        while (blockRow.length != 3) {
+            let firstLetter = alphabet[Utils.getRandomInteger(alphabetLength)];
+            let secondLetter = alphabet[Utils.getRandomInteger(alphabetLength)]
+            let firstNumber = Utils.getRandomInteger(10);
 
-            return textBlock;
-        });
-    }
+            if (firstLetter != secondLetter) {
+                blockRow = Utils.shuffle(`${firstLetter}${secondLetter}${firstNumber}`);
+            }
+        }
 
-    _getRandomInteger(max) {
-        return Math.floor(Math.random() * max);
+        return blockRow;
     }
 
     addChangeListener(callback) {

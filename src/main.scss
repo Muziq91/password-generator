@@ -12,14 +12,33 @@ body {
     background-color: #f8f8f8;
 }
 
+.text-block-display {
+    margin: auto;
+    width: 90%;
+}
+
 .action-button-display {
     background-color: #dadada;
-    padding-left: 15px;
-    margin-left: 10px;
+    margin-left: 30px;
 }
 
 .action-button-display-refresh {
     background-color: #dadada;
     padding-left: 15px;
     margin-left: 10px;
+}
+
+.password-display-text {
+    display: none;
+}
+
+.password-display {
+    background-color: #dadada;
+    margin: auto;
+    width: 80%;
+    text-align: center;
+}
+
+.text-block-reset {
+    float: right !important;
 }
