@@ -42,15 +42,15 @@ class App extends Component {
             return {
                 isCopied: true
             };
-        });
+        }, this._onPasswordTextCopiedStop);
     }
 
     _onPasswordTextCopiedStop() {
-        this.setState((prevState) => {
-            return {
+        window.setTimeout(() => {
+            this.setState({
                 isCopied: false
-            };
-        });
+            });
+        }, 2000);
     }
 
     componentWillMount() {

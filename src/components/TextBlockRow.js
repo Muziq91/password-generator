@@ -13,7 +13,6 @@ class TextBlockRow extends Component {
         this.state = {
             blockRowText: []
         }
-        TextBlockRowActions.createTextBlock();
         this._onTextBlockClicked = this._onTextBlockClicked.bind(this)
         this._onTextBlockChange = this._onTextBlockChange.bind(this);
     }
@@ -23,7 +22,7 @@ class TextBlockRow extends Component {
     }
 
     componentDidMount() {
-        //TextBlockRowActions.createTextBlock();
+        TextBlockRowActions.createTextBlock();
     }
 
     componentWillUnmount() {
