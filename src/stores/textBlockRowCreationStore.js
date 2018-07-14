@@ -15,7 +15,7 @@ class TextBlockRowCreationStore extends EventEmitter {
     }
 
     _registerToActions(action) {
-        if (action.type == ActionTypes.CREATE_TEXT_BLOCK)
+        if (action.type === ActionTypes.CREATE_TEXT_BLOCK)
             this.createTextBlock();
     }
 

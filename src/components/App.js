@@ -43,8 +43,6 @@ class App extends Component {
                 isCopied: true
             };
         });
-
-        setInterval(this._onPasswordTextCopiedStop, 3000);
     }
 
     _onPasswordTextCopiedStop() {
@@ -80,8 +78,11 @@ class App extends Component {
                             <CopyPasswordToClipboard text={passwordValue} passwordTextCopied={this._onPasswordTextCopied} />
                         </div>)}
                     <br />
-                    {isCopied && (<MessageBar messageBarType={MessageBarType.success} dismissButtonAriaLabel="Close">
-                        Copied
+                    {isCopied && (
+                        <MessageBar messageBarType={MessageBarType.success}
+                            dismissButtonAriaLabel="Close"
+                            isMultiline={false}>
+                            Copied
                     </MessageBar>)}
                 </div>
             </div>
