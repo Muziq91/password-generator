@@ -37,7 +37,7 @@ module.exports = {
             chunkFilename: "[id].css"
         })
     ], // plugins ends
-    resolve:{
+    resolve: {
         extensions: ['.js', '.scss']
     }
 }

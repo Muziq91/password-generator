@@ -7,7 +7,7 @@ const AppInstructions = function (props) {
         <div className="ms-Grid-row row app-instructions ms-font-m">
             <Label> This is a password generator app.
                 The application relies on random generated blocks of text alongside the random input from the user.
-                 Based on the selected blocks of text, password size and number of symbols a special unique and random password will be generated. </Label>
+                 Based on the selected blocks of text, password size and number of symbols a special unique and random password will be generated. All information is private and confidential. Nothing is being shared over the internet.</Label>
             <Label> Steps:</Label>
             <Label>1. Using the slider on the left adjust the password size (12 - 24 characters long).</Label>
             <Label>2. Using the slider on the right choose the maximum number of special charactes that the password should contain.</Label>
