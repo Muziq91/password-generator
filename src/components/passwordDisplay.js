@@ -7,7 +7,7 @@ const PasswordDisplay = function (props) {
     const { text } = props;
 
     return (
-        <div className="password-display ms-font-xxl">
+        <div className="ms-Grid-col ms-sm10 ms-md10 ms-lg10 ms-font-xxl">
             <Label> {text}</Label>
         </div>
     )
