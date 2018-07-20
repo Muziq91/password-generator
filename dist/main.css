@@ -19994,9 +19994,10 @@ body {
 
 .content {
   padding: 10px;
-  max-width: 600px;
-  max-height: 800px;
-  height: 800px;
+  max-width: 800px;
+  max-height: 1200px;
+  height: 1000px;
+  overflow: scroll;
   margin: auto;
   background-color: #f8f8f8; }
 
@@ -20019,8 +20020,16 @@ body {
 .password-display {
   background-color: #dadada;
   margin: auto;
-  width: 80%;
-  text-align: center; }
+  width: 76%;
+  text-align: center;
+  margin-left: 64px; }
+
+.copy-passwords-row {
+  background-color: #dadada;
+  margin: auto;
+  width: 76%;
+  text-align: center;
+  margin-left: 64px; }
 
 .copy-password-button {
   background-color: #dadada;
@@ -20032,4 +20041,10 @@ body {
 .app-title {
   margin: auto;
   width: 65%; }
+
+.custom-message-bar {
+  position: fixed;
+  bottom: 0;
+  width: 40%;
+  height: 10%; }
 

@@ -3,6 +3,7 @@ import TextBlockRow from './textBlockRow';
 import TextBlockReset from './textBlockReset';
 import TextBlockRefresh from './textBlockRefresh';
 import TextBlockDisplay from './textBlockDisplay';
+import TotalPasswordsGenerated from './totalPasswordsGenerated'
 import PasswordDetails from './passwordDetails';
 import * as TextBlockRowActions from '../actions/textBlockRowActions';
 import * as Utils from '../utils';
@@ -15,7 +16,8 @@ class TextBlocksCreator extends Component {
             textBlockValues: [],
             textBlockRows: 4,
             passwordSize: 12,
-            symbolSize: 3
+            symbolSize: 3,
+            totalNumberOfPasswords: 1
         }
 
         this._onResetTextBlocksClick = this._onResetTextBlocksClick.bind(this);
@@ -24,6 +26,7 @@ class TextBlocksCreator extends Component {
         this._onTextBlockRemoved = this._onTextBlockRemoved.bind(this);
         this._onPasswordSizeChange = this._onPasswordSizeChange.bind(this);
         this._onSymbolSizeChange = this._onSymbolSizeChange.bind(this);
+        this._onTotalNumberOfPasswordsChange = this._onTotalNumberOfPasswordsChange.bind(this);
         this._processTextBlock = this._processTextBlock.bind(this);
     }
 
@@ -33,7 +36,8 @@ class TextBlocksCreator extends Component {
                 textBlockValues: [],
                 textBlockRows: 4,
                 passwordSize: 12,
-                symbolSize: 3
+                symbolSize: 3,
+                totalNumberOfPasswords: 1
             };
         });
 
@@ -79,9 +83,17 @@ class TextBlocksCreator extends Component {
         }, this._processTextBlock);
     }
 
+    _onTotalNumberOfPasswordsChange(value) {
+        this.setState((prevState) => {
+            return {
+                totalNumberOfPasswords: value
+            };
+        }, this._processTextBlock);
+    }
+
     _processTextBlock() {
-        const { textBlockValues, passwordSize, symbolSize } = this.state;
-        TextBlockRowActions.processTextBlock(textBlockValues, passwordSize, symbolSize);
+        const { textBlockValues, passwordSize, symbolSize, totalNumberOfPasswords } = this.state;
+        TextBlockRowActions.processTextBlock(textBlockValues, passwordSize, symbolSize, totalNumberOfPasswords);
     }
 
     _initializeBlockRows() {
@@ -99,7 +111,7 @@ class TextBlocksCreator extends Component {
     }
 
     render() {
-        const { textBlockValues, passwordSize, symbolSize } = this.state;
+        const { textBlockValues, passwordSize, symbolSize, totalNumberOfPasswords } = this.state;
         return (
             <div>
                 <br />
@@ -115,6 +127,9 @@ class TextBlocksCreator extends Component {
                     onSymbolSizeChange={this._onSymbolSizeChange} />
                 <br />
                 {this._initializeBlockRows()}
+                <br />
+                <TotalPasswordsGenerated onTotalNumberOfPasswordsChange={this._onTotalNumberOfPasswordsChange}
+                    totalNumberOfPasswords={totalNumberOfPasswords} />
                 <br />
                 <TextBlockDisplay textBlockValues={textBlockValues}
                     textBlockRemoved={this._onTextBlockRemoved} />

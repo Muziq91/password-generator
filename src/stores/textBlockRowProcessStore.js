@@ -1,4 +1,3 @@
-
 import { EventEmitter } from 'events';
 import Dispatcher from '../dispatcher';
 import ActionTypes from '../constants';
@@ -20,18 +19,25 @@ class TextBlockRowProcessStore extends EventEmitter {
     }
 
     processTextBlock(payload) {
-        const { textBlockValues, passwordSize, symbolSize } = payload;
+        const { textBlockValues, passwordSize, symbolSize, totalNumberOfPasswords } = payload;
+        _passwordState = [];
 
         if (!textBlockValues)
             return;
 
-        if (textBlockValues.length < 4) {
-            _passwordState = textBlockValues.join('');
-        }
-        else {
-            _passwordState = this._computeNewPassword(textBlockValues, passwordSize, symbolSize);
-        }
+        if (textBlockValues.length > 0) {
+            for (var i = 0; i < totalNumberOfPasswords; i++) {
+                let newPassword = '';
+                if (textBlockValues.length < 4) {
+                    newPassword = textBlockValues.join('');
+                }
+                else {
+                    newPassword = this._computeNewPassword(textBlockValues, passwordSize, symbolSize);
+                }
 
+                _passwordState.push(newPassword);
+            }
+        }
         this.emit(CHANGE);
     }
 

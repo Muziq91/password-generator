@@ -5,21 +5,23 @@ import { ActionButton, IButtonProps } from 'office-ui-fabric-react/lib/Button';
 
 const CopyPasswordToClipboard = function (props) {
 
+    const { value, text } = props;
+
     return (
-        <div className="ms-Grid-col ms-sm2 ms-md2 ms-lg2 text-block-reset ms-font-xxl" >
-            <CopyToClipboard text={props.text}>
-                <ActionButton
-                    data-automation-id="Copy password"
-                    iconProps={{ iconName: 'Copy' }}
-                    onClick={() => props.passwordTextCopied()}>
-                    Copy
-                    </ActionButton>
-            </CopyToClipboard>
-        </div >)
+        <CopyToClipboard text={value}>
+            <ActionButton
+                data-automation-id="Copy password"
+                iconProps={{ iconName: 'Copy' }}
+                onClick={() => props.passwordTextCopied()}>
+                {text}
+            </ActionButton>
+        </CopyToClipboard>
+    )
 }
 
 CopyPasswordToClipboard.propTypes = {
     passwordTextCopied: PropTypes.func.isRequired,
+    value: PropTypes.string.isRequired,
     text: PropTypes.string.isRequired
 }
 

@@ -6,12 +6,13 @@ import AppInstructions from './appInstructions';
 import PasswordDisplay from './passwordDisplay';
 import CopyPasswordToClipboard from './copyPasswordToClipboard';
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
+import * as Utils from '../utils';
 
 class App extends Component {
     constructor() {
         super();
         this.state = {
-            passwordValue: "",
+            passwordValues: [],
             isCopied: false
         }
 
@@ -22,17 +23,17 @@ class App extends Component {
     }
 
     _onTextBlockProcess() {
-        let newPasswordValue = TextBlockRowProcesStore.getProcessedPassword();
+        let newPasswordValues = TextBlockRowProcesStore.getProcessedPassword();
 
         this.setState({
-            passwordValue: newPasswordValue
+            passwordValues: newPasswordValues
         })
     }
 
     _onTextBlocksReset() {
         this.setState((prevState) => {
             return {
-                passwordValue: ""
+                passwordValues: []
             };
         });
     }
@@ -61,8 +62,50 @@ class App extends Component {
         TextBlockRowProcesStore.removeChangeListener(this._onTextBlockProcess)
     }
 
+    getPasswordsManipulationButtons() {
+        const { passwordValues } = this.state;
+        let singlePasswordValue = '';
+        let csvPasswordValue = '';
+
+        singlePasswordValue = passwordValues.join('\n');
+        csvPasswordValue = passwordValues.join(', ');
+
+        return singlePasswordValue && (
+            <div className="ms-Grid-row row copy-passwords-row">
+                <div className="ms-Grid-col ms-sm4 ms-md4 ms-lg4 ms-font-l" >
+                    <CopyPasswordToClipboard
+                        value={singlePasswordValue}
+                        text={"Copy Passwords on new line"}
+                        passwordTextCopied={this._onPasswordTextCopied} />
+                </div >
+                <div className="ms-Grid-col ms-sm4 ms-md4 ms-lg4 ms-font-l" >
+                    <CopyPasswordToClipboard
+                        value={csvPasswordValue}
+                        text={"Copy Passwords as CSV"}
+                        passwordTextCopied={this._onPasswordTextCopied} />
+                </div >
+            </div >);
+    }
+
+    getPasswordsToDisplay() {
+        const { passwordValues } = this.state;
+
+        return passwordValues.map(passwordValue => {
+            return passwordValue &&
+                (<div className="ms-Grid-row row password-display" key={Utils.getUniqueId()}>
+                    <PasswordDisplay text={passwordValue} />
+                    <div className="ms-Grid-col ms-sm2 ms-md2 ms-lg2 ms-font-l" >
+                        <CopyPasswordToClipboard
+                            value={passwordValue}
+                            text={"Copy"}
+                            passwordTextCopied={this._onPasswordTextCopied} />
+                    </div >
+                </div>);
+        })
+    }
+
     render() {
-        const { passwordValue, isCopied } = this.state;
+        const { isCopied } = this.state;
         return (
             <div className="content">
                 <div className="ms-Grid">
@@ -72,18 +115,18 @@ class App extends Component {
                     <br />
                     <TextBlocksCreator textBlocksReset={this._onTextBlocksReset} />
                     <br />
-                    {passwordValue &&
-                        (<div className="ms-Grid-row row password-display" >
-                            <PasswordDisplay text={passwordValue} />
-                            <CopyPasswordToClipboard text={passwordValue} passwordTextCopied={this._onPasswordTextCopied} />
-                        </div>)}
+                    {this.getPasswordsManipulationButtons()}
+                    <br />
+                    {this.getPasswordsToDisplay()}
                     <br />
                     {isCopied && (
-                        <MessageBar messageBarType={MessageBarType.success}
-                            dismissButtonAriaLabel="Close"
-                            isMultiline={false}>
-                            Copied
-                    </MessageBar>)}
+                        <div className='custom-message-bar'>
+                            <MessageBar messageBarType={MessageBarType.success}
+                                dismissButtonAriaLabel="Close"
+                                isMultiline={false}>
+                                Copied
+                            </MessageBar>
+                        </div>)}
                 </div>
             </div>
         )

@@ -13,14 +13,15 @@ export function removeTextBlock(textBlockValue) {
         })
 }
 
-export function processTextBlock(textBlockValues, passwordSize, symbolSize) {
+export function processTextBlock(textBlockValues, passwordSize, symbolSize, totalNumberOfPasswords) {
     Dispatcher.dispatch(
         {
             type: ActionTypes.PROCESS_TEXT_BLOCK,
             payload: {
                 textBlockValues: textBlockValues,
                 passwordSize: passwordSize,
-                symbolSize: symbolSize
+                symbolSize: symbolSize,
+                totalNumberOfPasswords: totalNumberOfPasswords
             }
         })
 }
